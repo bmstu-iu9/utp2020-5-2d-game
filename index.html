@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Сапёр</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-    <script src="script.js"></script>
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    <title>Сапёр</title>
 </head>
 <body>
     <div class="wrapper">
         <div class="content">
-            <canvas id="canvas"></canvas>
+            <div id="app"></div>
+        </div>
+        <div class="left_buttons">
+            <input id="easy" type="radio" name="hard" checked> Легко
+            <input id="norm" type="radio" name="hard"> Нормально
+            <input id="hard" type="radio" name="hard"> Сложно
+        </div>
+        <div class="right_buttons">
+            <button>Начать заново</button>
+            <p><input id="bonus" type="checkbox" name="bonus" value=1/>Режим "Бонусы"</p>
+        </div>
+        <div class="bottom_buttons">
+            <span class="btn">Игра</span>
+            <span class="btn">Настройки</span>
+            <span class="btn actived">Правила игры</span>
         </div>
     </div>
+    <script src="console.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

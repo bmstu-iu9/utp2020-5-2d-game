@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap');
+
 body {
     background-color: #919389;
 }
@@ -6,7 +9,7 @@ body {
     width: 1000px;
     height: 800px;
     margin: 0 auto;
-    background-image: url(img/terminal.png);
+    background-image: url(assets/terminal.png);
     background-position: top;
     background-repeat: no-repeat;
 }
@@ -21,11 +24,11 @@ body {
     border-radius: 40px;
     color:#64935c;
     font-size: 14px;
-    font-family: "Share Tech Mono", monospace;
+    font-family: 'IBM Plex Mono', monospace;
 
 }
 
-.buttons {
+.bottom_buttons {
     position: absolute;
     top:500px;
     left: 800px;
