@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <title>Сапёр</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <script src="script.js"></script>
+    <script src = "xhr.js"></script>
 </head>
 <body>
     <div class="wrapper">
-        <div class="content">
-            <button id="easy">Новичок</button>
-            <button id="norm">Любитель</button>
-            <button id="hard">Профессионал</button>
-            <div><canvas id="canvas"></canvas></div>
+        <div class="content" id="content">
+            <h2>Настройки</h2>
+        </div>
+         <div class="bottom_buttons">
+            <span class="btn" id="button_game">Игра</span>
+            <span class="btn" id="button_options">Настройки</span>
+            <span class="btn actived" id="button_rules">Правила игры</span>
         </div>
     </div>
 </body>

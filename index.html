@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,25 +7,27 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <title>Сапёр</title>
+    <script src = "xhr.js"></script>
 </head>
 <body>
     <div class="wrapper">
-        <div class="content">
+        <h1>Сапёр</h1>
+        <div class="content" id="content">
             <div id="app"></div>
         </div>
         <div class="left_buttons">
-            <input id="easy" type="radio" name="hard" checked> Легко
-            <input id="norm" type="radio" name="hard"> Нормально
-            <input id="hard" type="radio" name="hard"> Сложно
+            <span><input id="easy" type="radio" name="hard" checked>Легко</span>
+            <span><input id="norm" type="radio" name="hard"> Нормально</span>
+            <span><input id="hard" type="radio" name="hard"> Сложно</span>
         </div>
         <div class="right_buttons">
             <button>Начать заново</button>
-            <p><input id="bonus" type="checkbox" name="bonus" value=1/>Режим "Бонусы"</p>
+            <p><input id="bonus" type="checkbox" name="bonus" value=1>Режим "Бонусы"</p>
         </div>
         <div class="bottom_buttons">
-            <span class="btn">Игра</span>
-            <span class="btn">Настройки</span>
-            <span class="btn actived">Правила игры</span>
+            <span class="btn" id="button_game">Игра</span>
+            <span class="btn" id="button_options">Настройки</span>
+            <span class="btn actived" id = "button_rules">Правила игры</span>
         </div>
     </div>
     <script src="console.js"></script>
