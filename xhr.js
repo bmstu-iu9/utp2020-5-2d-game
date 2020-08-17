@@ -24,6 +24,9 @@ window.onload = function () {
             var posOfStart = text.indexOf("<div class=\"content\" id=\"content\">");
             var posOfEnd = text.indexOf("</div>")
             content.innerHTML = '<div id="app"></div>';
+            buttonGame.classList.toggle("actived");
+            buttonOptions.classList.remove("actived");
+            buttonRules.classList.remove("actived");
         }
     }
 
@@ -47,6 +50,9 @@ window.onload = function () {
             var posOfStart = text.indexOf("<div class=\"content\" id=\"content\">");
             var posOfEnd = text.indexOf("</div>")
             content.innerHTML = text.slice(posOfStart + "<div class=\"content\" id=\"content\">".length, posOfEnd);
+            buttonOptions.classList.toggle("actived");
+            buttonGame.classList.remove("actived");
+            buttonRules.classList.remove("actived");
         }
     }
 
@@ -70,6 +76,9 @@ window.onload = function () {
             var posOfStart = text.indexOf("<div class=\"content\" id=\"content\">");
             var posOfEnd = text.indexOf("</div>")
             content.innerHTML = text.slice(posOfStart + "<div class=\"content\" id=\"content\">".length, posOfEnd);
+            buttonRules.classList.toggle("actived");
+            buttonGame.classList.remove("actived");
+            buttonOptions.classList.remove("actived");
         }
     }
 };
