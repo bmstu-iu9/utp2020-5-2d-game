@@ -1,8 +1,53 @@
+body {
+    background-color: #919389;
+}
+
+.wrapper {
+    width: 1000px;
+    height: 800px;
+    margin: 0 auto;
+    background-image: url(img/terminal.png);
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
 .content {
-    width: 800px;
+    position: absolute;
+    margin: 108px 300px 130px 270px;
+    padding: 4px 10px 2px 8px;
+    overflow: auto;
+    width: 440px;
+    height: 330px;
+    border-radius: 40px;
+    color:#64935c;
+    font-size: 14px;
+    font-family: "Share Tech Mono", monospace;
+
+}
+
+.buttons {
+    position: absolute;
+    top:500px;
+    left: 800px;
     margin: 0 auto;
 }
 
-canvas {
-    width: 800px;
+.btn {
+    font-size: 16px;
+    display: inline-block;
+    margin: 5px 20px 0 5px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    color: #777777;
+}
+
+.btn:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.btn.actived {
+    color: black;
+    font-size: 20px;
+    font-weight: 700;
 }
