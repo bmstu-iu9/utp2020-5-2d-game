@@ -79,6 +79,7 @@ window.onload = function () {
             buttonRules.classList.toggle("actived");
             buttonGame.classList.remove("actived");
             buttonOptions.classList.remove("actived");
+
         }
     }
 };
