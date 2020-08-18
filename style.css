@@ -105,3 +105,7 @@ h2 {
 .right_buttons .btn {
     margin: 0;
 }
+
+.option {
+    font-size: 18px;
+}

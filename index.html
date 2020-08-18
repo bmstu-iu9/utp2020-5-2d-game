@@ -7,22 +7,22 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <title>Сапёр</title>
-    <script src = "xhr.js"></script>
 </head>
 <body>
     <div class="wrapper">
-        <h1>Сапёр</h1>
+        <h1 id = "title">Сапёр</h1>
         <div class="content" id="content">
             <div id="app"></div>
         </div>
         <div class="left_buttons">
-            <span><input id="easy" type="radio" name="hard" checked>Легко</span>
-            <span><input id="norm" type="radio" name="hard"> Нормально</span>
-            <span><input id="hard" type="radio" name="hard"> Сложно</span>
+            <span id="easy-span"><input id="easy" type="radio" name="hard" checked>Легко</span>
+            <span id="medium-span"><input id="norm" type="radio" name="hard"> Нормально</span>
+            <span id="hard-span"><input id="hard" type="radio" name="hard"> Сложно</span>
+            <button class="btn" id="restart">Рестарт</button>
         </div>
         <div class="right_buttons">
-            <button class="btn">Начать заново</button>
-            <p><input id="bonus" type="checkbox" name="bonus" value=1>Режим "Бонусы"</p>
+
+            <span id = "bonus-span"><input id="bonus" type="checkbox" name="bonus" value=1>Бонус режим</span>
         </div>
         <div class="bottom_buttons">
             <span class="btn" id="button_game">Игра</span>
@@ -32,5 +32,6 @@
     </div>
     <script src="console.js"></script>
     <script src="script.js"></script>
+    <script src = "xhr.js"></script>
 </body>
 </html>

@@ -5,13 +5,16 @@
     <title>Сапёр</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    <script src="script.js"></script>
-    <script src = "xhr.js"></script>
 </head>
 <body>
     <div class="wrapper">
         <div class="content" id="content">
-            <h2>Настройки</h2>
+            <h2 id="page">Настройки</h2>
+            <form class = "form_options">
+                <span class="option">Язык:</span>
+                <span><input id="russian" type="radio" name="language" onclick="setRussian()">Русский</span>
+                <span><input id="english" type="radio" name="language" onclick="setEnglish()">English</span>
+            </form>
         </div>
          <div class="bottom_buttons">
             <span class="btn" id="button_game">Игра</span>
@@ -19,5 +22,8 @@
             <span class="btn actived" id="button_rules">Правила игры</span>
         </div>
     </div>
+    <script src = "xhr.js"></script>
+    <script src="script.js"></script>
+    <script src="console.js"></script>
 </body>
 </html>
