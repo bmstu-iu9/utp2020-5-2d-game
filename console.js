@@ -152,7 +152,6 @@ function matrixToHtml(matrix, difficulty) {  /*превращает матриц
 
 }
 
-
 function forEach(matrix, handler) {  //функция, которая получает матрицу и функцию handler, теперь для каждого элекента матрицы сделай  handler
 	for (let y = 0; y < matrix.length; y++) {
 		for (let x = 0; x < matrix[y].length; x++) {
@@ -160,7 +159,6 @@ function forEach(matrix, handler) {  //функция, которая получ
 		}
 	}
 }
-
 
 function showSpread(matrix, x, y, boo) { // функция, которая отображает доп. участки поля, если клетка полностью путсая и мы открыли её, или если это цифра, рядом с которой есть пустая
 	const cell = getCell(matrix, x, y);
