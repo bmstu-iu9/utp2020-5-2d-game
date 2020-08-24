@@ -1,526 +1,197 @@
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+let matrix = null //массив переменных, нашего поля
 
+let running = null //условная переменная, которая отслеживает играем мы или нет ещё
 
+let difficulty;
 
-document.getElementById('easy').onclick = function(){
-	let countBlock = 10;
-	let sizeBlock = 40;
-	let CB = 0.1;
-	let game = false;
+init();
 
-	let blocks = Array();
+document
+	.querySelector('button') //создаём переменную, хранящую значение кнопки
+	.addEventListener('click', init); //проверяем на клик, если он есть, то запускаем заново
 
-	canvas.width = countBlock * sizeBlock;
-	canvas.height = countBlock * sizeBlock;
+function init() { //функция запуска игры, в зависимости он переключателя сложности задаёт параметры
+	let countX;
+	let mines;
+	let countY;
 
-	function plusOne(h,w) {
+	if (easy.checked) {
+		countX = 10;
+		countY = 10;
+		mines = 10;
+		difficulty = 'easy';
+	}
+	else if (norm.checked) {
+		countX = 20;
+		countY = 20;
+		mines = 40;
+		difficulty = 'normal';
+	}
+	else {
+		countX = 40;
+		countY = 20;
+		mines = 70;
+		difficulty = 'hard';
+	}
+	matrix = getMatrix(countX, countY); //создаём "поле" в виде массива, без изображения
+	running = true; //помечаем, что играем
+	for (let i = 0; i < mines; i++) {
+		setRandomMine(matrix); //сажаем мины, скролько раз цикл работает, столько и мины
+		update() //обновляем изображение
+	}
+}
 
-    if(h >=0 && h <= countBlock - 1 && w >= 0 && w < countBlock - 1) {
-
-        if(blocks[h][w].number != 9) {
-
-            blocks[h][w].number++;
-
-        }
-    }
-
+if (!running) {
+	init(); //если не играем, то запускаем новую партию
 }
 
 
-function start(sh,sw) {
-
-    blocks = Array();
-
-    for(let h = 0; h < countBlock; h++) {
-
-        let wline = Array();
-        for(let w = 0; w < countBlock; w++) {
-
-            if(h == sh && w == sw) {
-
-                wline.push({number:0, show:0});
-                continue;
-
-            }
-
-            if(Math.random() < CB) {
-               wline.push({number:9, show:0});
-            } else {
-                wline.push({number:0, show:0});
-            }
-
-        }
-
-        blocks.push(wline);
-
-    }
-
-    for(let h = 0; h < countBlock; h++) {
-        for(let w = 0; w < countBlock; w++) {
-            if(blocks[h][w].number == 9) {
-
-                plusOne(h,w-1);
-                plusOne(h,w+1);
-                plusOne(h-1,w);
-                plusOne(h+1,w);
-                plusOne(h-1,w-1);
-                plusOne(h-1,w+1);
-                plusOne(h+1,w-1);
-                plusOne(h+1,w+1);
-
-            }
-        }
-    }
-
-    game = true;
-
-}
-
-function draw() {
-
-    ctx.fillStyle = "#222";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    for(let h = 0; h < blocks.length; h++) {
-        for(let w = 0; w < blocks[h].length; w++) {
-
-            if(blocks[h][w].show) {
-
-                if(blocks[h][w].number == 9) {
-                    ctx.beginPath();
-                    ctx.fillStyle = "#f00";
-                    ctx.arc(w*sizeBlock+sizeBlock/2,h*sizeBlock+sizeBlock/2,sizeBlock/3,0,2*Math.PI,true);
-                    ctx.fill();
-                    continue;
-
-                }
-
-                ctx.fillStyle = "#555";
-                ctx.fillRect(w*sizeBlock,h*sizeBlock,sizeBlock,sizeBlock);
-
-                if(blocks[h][w].number) {
-
-                    ctx.font = "32px serif";
-                    ctx.fillStyle = "#ddd";
-                    ctx.fillText(blocks[h][w].number, w*sizeBlock + 10, (h+1)*sizeBlock - 10);
-
-
-                }
-
-            }
-
-        }
-    }
-
-    for(let t = 0; t < countBlock + 1; t++) {
-        ctx.strokeStyle = "#fff";
-        ctx.beginPath();
-        ctx.moveTo(0,t * sizeBlock);
-        ctx.lineTo(canvas.width,t * sizeBlock);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(t * sizeBlock,0);
-        ctx.lineTo(t * sizeBlock,canvas.height);
-        ctx.stroke();
-    }
-}
-
-setInterval(draw,25);
-
-canvas.addEventListener('mousedown',function(event){
+function update() {  //функиця обновления изображения и данных
 
 
 
-    let h = Math.floor((event.clientY/sizeBlock));
-    let w = Math.floor((event.clientX/sizeBlock));
+	const gameElement = matrixToHtml(matrix, difficulty); /*создание нашей игры*/
 
-    if(!game) {
-       start(h,w);
-    }
+	console.log(gameElement);  /* вывод нашей игры. вроде бы не надо, но оставл. на всякий случай*/
 
-    if (blocks[h][w].number == 9) {
-        console.log('lose');
-        game = false;
+	const appeElement = document.querySelector('#app'); /*вставляем его в div id, смотри HTML файл и ищи app*/
+	appeElement.innerHTML = ''; /*очистка div id от прочего хлама*/
+	appeElement.append(gameElement);
 
-    }
+	appeElement
+		.querySelectorAll('img') /*ищем все изображения*/
+		.forEach(imgElement => { /*для каждого элемента*/
+			imgElement.addEventListener('mousedown', mousedownHandler)  /*отслеживаем мауз даун*/
+			imgElement.addEventListener('mouseup', mouseupHandler) /*отслеживаем мауз ап*/
+			imgElement.addEventListener('mouseleave', mouseleaveHandler) /*мышь ушла с клетки*/
+		});
 
-    showBLock(h,w);
+	if (isLosing(matrix)) { //проверяем на условие проигрыша
+		alert('ГГ ВП! ВЫ ПРОИГРАЛИ! ');
+		running = false;
+		init(); //новый запуск
+	}
 
-
-});
-
-function showBLock(h,w) {
-
-    blocks[h][w].show = 1;
-
-    if (blocks[h][w].number != 0) {
-        return;
-    }
-
-    checkZero(h,w-1);
-    checkZero(h,w+1);
-    checkZero(h-1,w);
-    checkZero(h+1,w);
-
-}
-
-function checkZero(h,w) {
-
-    if(h >=0 && h <= countBlock - 1 && w >= 0 && w < countBlock - 1) {
-        if(!blocks[h][w].show) {
-           showBLock(h,w);
-        }   
-    }
-
-}
-}
-
-document.getElementById('norm').onclick = function(){
-	let countBlock = 20;
-	let sizeBlock = 40;
-	let CB = 0.2;
-	let game = false;
-
-	let blocks = Array();
-
-	canvas.width = countBlock * sizeBlock;
-	canvas.height = countBlock * sizeBlock;
-
-	function plusOne(h,w) {
-
-    if(h >=0 && h <= countBlock - 1 && w >= 0 && w < countBlock - 1) {
-
-        if(blocks[h][w].number != 9) {
-
-            blocks[h][w].number++;
-
-        }
-    }
-
+	if (isWin(matrix)) { //проверяем на условие выигрыша
+		alert('ВЫ ПОБЕДИЛИ!');
+		running = false;
+		init(); //новый запуск
+	}
 }
 
 
-function start(sh,sw) {
 
-    blocks = Array();
+function mouseupHandler(event) { /*служебная функция, которая принимает само событие и обрабатывает его,"поднятие" кнопки мыши*/
+	const { cell, rigth, left } = getInfo(event);  // { } - деконструкция, https://learn.javascript.ru/destructuring
 
-    for(let h = 0; h < countBlock; h++) {
+	const both = cell.rigth && cell.left && (left || rigth); //опустили обе кнопки
+	const leftMouse = !both && cell.left && left; //опустили левую только
+	const rigthMouse = !both && cell.rigth && rigth; //опустили правую кнопку
 
-        let wline = Array();
-        for(let w = 0; w < countBlock; w++) {
+	if (both) { //если подняли обе кнопки,то убираем оранжевое изображение
+		forEach(matrix, x => x.poten = false);
+	}
 
-            if(h == sh && w == sw) {
+	if (left) {
+		cell.left = false;  //помечаем, что подняли левую кнопку мыши
+	}
 
-                wline.push({number:0, show:0});
-                continue;
+	if (rigth) {
+		cell.rigth = false;  //помечаем, что подняли правую кнопку мыши
+	}
 
-            }
+	if (leftMouse) { //если подняли левую кнопку мыши, то запускаем клик левой кнопки
+		leftHandler(cell);
+	}
 
-            if(Math.random() < CB) {
-               wline.push({number:9, show:0});
-            } else {
-                wline.push({number:0, show:0});
-            }
+	else if (rigthMouse) { //если подняли правую кнопку мыши, то запускаем правый клик
+		rigthHandler(cell);
+	}
 
-        }
-
-        blocks.push(wline);
-
-    }
-
-    for(let h = 0; h < countBlock; h++) {
-        for(let w = 0; w < countBlock; w++) {
-            if(blocks[h][w].number == 9) {
-
-                plusOne(h,w-1);
-                plusOne(h,w+1);
-                plusOne(h-1,w);
-                plusOne(h+1,w);
-                plusOne(h-1,w-1);
-                plusOne(h-1,w+1);
-                plusOne(h+1,w-1);
-                plusOne(h+1,w+1);
-
-            }
-        }
-    }
-
-    game = true;
-
+	update();
 }
 
-function draw() {
+function mousedownHandler(event) { /*служебная функция, которая принимает само событие и обрабатывает его, нажатие мыши*/
+	const { cell, left, rigth } = getInfo(event);  // { } - деконструкция, https://learn.javascript.ru/destructuring
 
-    ctx.fillStyle = "#222";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+	if (left) { //если мы нажали левую кнопку мыши
+		cell.left = true;
+	}
 
-    for(let h = 0; h < blocks.length; h++) {
-        for(let w = 0; w < blocks[h].length; w++) {
+	if (rigth) { //если мы нажали правую кнопку мыши
+		cell.rigth = true;
+	}
 
-            if(blocks[h][w].show) {
+	if (cell.left && cell.rigth) { //если нажали обе кнопки мыши
+		bothHandler(cell);
+	}
 
-                if(blocks[h][w].number == 9) {
-                    ctx.beginPath();
-                    ctx.fillStyle = "#f00";
-                    ctx.arc(w*sizeBlock+sizeBlock/2,h*sizeBlock+sizeBlock/2,sizeBlock/3,0,2*Math.PI,true);
-                    ctx.fill();
-                    continue;
-
-                }
-
-                ctx.fillStyle = "#555";
-                ctx.fillRect(w*sizeBlock,h*sizeBlock,sizeBlock,sizeBlock);
-
-                if(blocks[h][w].number) {
-
-                    ctx.font = "32px serif";
-                    ctx.fillStyle = "#ddd";
-                    ctx.fillText(blocks[h][w].number, w*sizeBlock + 10, (h+1)*sizeBlock - 10);
-
-
-                }
-
-            }
-
-        }
-    }
-
-    for(let t = 0; t < countBlock + 1; t++) {
-        ctx.strokeStyle = "#fff";
-        ctx.beginPath();
-        ctx.moveTo(0,t * sizeBlock);
-        ctx.lineTo(canvas.width,t * sizeBlock);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(t * sizeBlock,0);
-        ctx.lineTo(t * sizeBlock,canvas.height);
-        ctx.stroke();
-    }
+	update(); //обнови изображение
 }
 
-setInterval(draw,25);
+function mouseleaveHandler(event) {// фкнуция фиксирующая отжатие кнопки
+	const info = getInfo(event);
 
-canvas.addEventListener('mousedown',function(event){
+	info.cell.lest = false;
+	info.cell.rigth = false;
 
-
-
-    let h = Math.floor((event.clientY/sizeBlock));
-    let w = Math.floor((event.clientX/sizeBlock));
-
-    if(!game) {
-       start(h,w);
-    }
-
-    if (blocks[h][w].number == 9) {
-        console.log('lose');
-        game = false;
-
-    }
-
-    showBLock(h,w);
-
-
-});
-
-function showBLock(h,w) {
-
-    blocks[h][w].show = 1;
-
-    if (blocks[h][w].number != 0) {
-        return;
-    }
-
-    checkZero(h,w-1);
-    checkZero(h,w+1);
-    checkZero(h-1,w);
-    checkZero(h+1,w);
-
+	update();
 }
 
-function checkZero(h,w) {
+function getInfo(event) {
+	const element = event.target; /*на кого мы кликнули*/
+	const cellid = parseInt(element.getAttribute('data-cell-id')); /*получаем от объекта id, parseInt для превращения в int,getAttribute возвращает строку*/
 
-    if(h >=0 && h <= countBlock - 1 && w >= 0 && w < countBlock - 1) {
-        if(!blocks[h][w].show) {
-           showBLock(h,w);
-        }   
-    }
-
-}
-}
-
-document.getElementById('hard').onclick = function(){
-	let countBlock = 40;
-	let sizeBlock = 20;
-	let CB = 0.35;
-	let game = false;
-
-	let blocks = Array();
-
-	canvas.width = countBlock * sizeBlock;
-	canvas.height = countBlock * sizeBlock;
-
-	function plusOne(h,w) {
-
-    if(h >=0 && h <= countBlock - 1 && w >= 0 && w < countBlock - 1) {
-
-        if(blocks[h][w].number != 9) {
-
-            blocks[h][w].number++;
-
-        }
-    }
-
+	return {
+		left: event.which === 1, /*прожали левую кнопку мыши или нет*/
+		rigth: event.which === 3, /*прожали правую кнопку мыши или нет*/
+		cell: getCellById(matrix, cellid)
+	}
 }
 
+function leftHandler(cell) { //функция при нажатие левой кнопки мыши
+	console.log("jjjjjjj");
+	if (cell.flag || cell.show) { //если на клетке уже стоит флаг или мы уже тыкали на неё
+		return;
+	}
 
-function start(sh,sw) {
+	cell.show = true;
 
-    blocks = Array();
-
-    for(let h = 0; h < countBlock; h++) {
-
-        let wline = Array();
-        for(let w = 0; w < countBlock; w++) {
-
-            if(h == sh && w == sw) {
-
-                wline.push({number:0, show:0});
-                continue;
-
-            }
-
-            if(Math.random() < CB) {
-               wline.push({number:9, show:0});
-            } else {
-                wline.push({number:0, show:0});
-            }
-
-        }
-
-        blocks.push(wline);
-
-    }
-
-    for(let h = 0; h < countBlock; h++) {
-        for(let w = 0; w < countBlock; w++) {
-            if(blocks[h][w].number == 9) {
-
-                plusOne(h,w-1);
-                plusOne(h,w+1);
-                plusOne(h-1,w);
-                plusOne(h+1,w);
-                plusOne(h-1,w-1);
-                plusOne(h-1,w+1);
-                plusOne(h+1,w-1);
-                plusOne(h+1,w+1);
-
-            }
-        }
-    }
-
-    game = true;
-
+	if (!cell.mine) { //если клетка пустая, то открываем все смежные пустые клетки, если же это цифра, то, если есть смежная пустая, то открываем все смежные с последней
+		showSpread(matrix, cell.x, cell.y, true); //функция по поткрытию всех соседних клеток до 1 клеток с цифрами
+		update();
+	}
 }
 
-function draw() {
-
-    ctx.fillStyle = "#222";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    for(let h = 0; h < blocks.length; h++) {
-        for(let w = 0; w < blocks[h].length; w++) {
-
-            if(blocks[h][w].show) {
-
-                if(blocks[h][w].number == 9) {
-                    ctx.beginPath();
-                    ctx.fillStyle = "#f00";
-                    ctx.arc(w*sizeBlock+sizeBlock/2,h*sizeBlock+sizeBlock/2,sizeBlock/3,0,2*Math.PI,true);
-                    ctx.fill();
-                    continue;
-
-                }
-
-                ctx.fillStyle = "#555";
-                ctx.fillRect(w*sizeBlock,h*sizeBlock,sizeBlock,sizeBlock);
-
-                if(blocks[h][w].number) {
-
-                    ctx.font = "32px serif";
-                    ctx.fillStyle = "#ddd";
-                    ctx.fillText(blocks[h][w].number, w*sizeBlock + 10, (h+1)*sizeBlock - 10);
-
-
-                }
-
-            }
-
-        }
-    }
-
-    for(let t = 0; t < countBlock + 1; t++) {
-        ctx.strokeStyle = "#fff";
-        ctx.beginPath();
-        ctx.moveTo(0,t * sizeBlock);
-        ctx.lineTo(canvas.width,t * sizeBlock);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(t * sizeBlock,0);
-        ctx.lineTo(t * sizeBlock,canvas.height);
-        ctx.stroke();
-    }
+function rigthHandler(cell) {  //функция запускающаяся при нажатие на правую кнопку
+	console.log("lllll");
+	if (!cell.show) {
+		cell.flag = !cell.flag;
+	}
 }
 
-setInterval(draw,25);
+function bothHandler(cell) { //фукнция запускающаяся при нажатие двух кнопок одновременно
+	console.log("dqdwqddwq");
+	if (!cell.show || !cell.number) {
+		return;
+	}
 
-canvas.addEventListener('mousedown',function(event){
+	const cells = getAroundCells(matrix, cell.x, cell.y); //все рядом счтоящие клетки
+	const flags = cells.filter(x => x.flag).length; //колличество всех клеток,  которые рядом и на них есть флаг
 
+	if (flags === cell.number) { //если цифра на клетке и кол-во флагов рядом равны, то открываем  все соседние
+		cells
+			.filter(x => !x.flag && !x.show)  //ищем все клетки, которые без флага и не показаны
+			.forEach(x => { // для каждой из них
+				x.show = true;  //покажи
+				showSpread(matrix, cell.x, cell.y, true); //если чёрная, то покажи все клетки до первых с цифрами
+			});
+	}
 
-
-    let h = Math.floor((event.clientY/sizeBlock));
-    let w = Math.floor((event.clientX/sizeBlock));
-
-    if(!game) {
-       start(h,w);
-    }
-
-    if (blocks[h][w].number == 9) {
-        console.log('lose');
-        game = false;
-
-    }
-
-    showBLock(h,w);
-
-
-});
-
-function showBLock(h,w) {
-
-    blocks[h][w].show = 1;
-
-    if (blocks[h][w].number != 0) {
-        return;
-    }
-
-    checkZero(h,w-1);
-    checkZero(h,w+1);
-    checkZero(h-1,w);
-    checkZero(h+1,w);
-
-}
-
-function checkZero(h,w) {
-
-    if(h >=0 && h <= countBlock - 1 && w >= 0 && w < countBlock - 1) {
-        if(!blocks[h][w].show) {
-           showBLock(h,w);
-        }   
-    }
-
-}
+	else {
+		if (flags < cell.number) //если флагов меньше, чем цифр, подсвети, где может быть мина
+			cells
+				.filter(x => !x.flag && !x.show) //ищем все не отмеченные флагом и не показанные
+				.forEach(cell => cell.poten = true); //меняем для них значение poten
+	}
 }

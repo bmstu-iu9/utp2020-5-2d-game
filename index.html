@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Сапер</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--   <link rel="stylesheet" href="style.css"> в style.css стили запихнуть -->
 
+<!-- в данном html все картинки берут из условной папки assets -->
+    <title>Сапёр</title>
 </head>
 <body>
-    <button id="easy">Новичок</button>
-    <button id="norm">Любитель</button>
-    <button id="hard">Профессионал</button>
-    <p><canvas id="canvas"></canvas></p>
+    <input id="easy" type="radio" name="hard" checked/> Легко
+    <input id="norm" type="radio" name="hard" /> Нормально
+    <input id="hard" type="radio" name="hard" /> Сложно
+    <p> <input id "bonus" type="checkbox" name="bonus" value=1/> Режим "Бонусы" </p>
+    <div id="app"></div>
+    <button>Начать заново</button>
+    <script src="console.js"></script>
+    <!-- ВАЖНЫЕ ОБЩЕГО ПЛАНА ФУНКЦИИ, РЕИСПОЛЬЗОВАННЫЕ -->
+
     <script src="script.js"></script>
+    <!-- ТИПО MAIN -->
+
 </body>
 </html>
