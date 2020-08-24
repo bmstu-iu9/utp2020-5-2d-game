@@ -1,14 +1,26 @@
-<meta charset="utf-8">
-<body bgcolor=vodka>
-<font face=cursive size=6 color=catdog>
-<H1>Заготовка для статического сайта</H1>
-Для этого репозитория включены GitHub Pages, это значит, что содержимое
-репозитория автоматически становится статическим сайтом по адресу
-<br>
-https://bmstu-iu9.github.io/utp2020-5-2d-game
-<br>
-Так что Ваша задача — теперь наполнить правильным содержимым файл
-<tt>index.html</tt>.
-<p>
-P.S. Эта страница сделана максимально отвратительно (и внутри, и снаружи),
-чтобы мотивировать вас как можно скорее заменить это на что-то разумное.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--   <link rel="stylesheet" href="style.css"> в style.css стили запихнуть -->
+
+<!-- в данном html все картинки берут из условной папки assets -->
+    <title>Сапёр</title>
+</head>
+<body>
+    <input id="easy" type="radio" name="hard" checked/> Легко
+    <input id="norm" type="radio" name="hard" /> Нормально
+    <input id="hard" type="radio" name="hard" /> Сложно
+    <p> <input id "bonus" type="checkbox" name="bonus" value=1/> Режим "Бонусы" </p>
+    <div id="app"></div>
+    <button>Начать заново</button>
+    <script src="console.js"></script>
+    <!-- ВАЖНЫЕ ОБЩЕГО ПЛАНА ФУНКЦИИ, РЕИСПОЛЬЗОВАННЫЕ -->
+
+    <script src="script.js"></script>
+    <!-- ТИПО MAIN -->
+
+</body>
+</html>
