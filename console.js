@@ -152,6 +152,7 @@ function matrixToHtml(matrix, difficulty) {  /*превращает матриц
 
 }
 
+
 function forEach(matrix, handler) {  //функция, которая получает матрицу и функцию handler, теперь для каждого элекента матрицы сделай  handler
 	for (let y = 0; y < matrix.length; y++) {
 		for (let x = 0; x < matrix[y].length; x++) {
@@ -160,66 +161,55 @@ function forEach(matrix, handler) {  //функция, которая получ
 	}
 }
 
-function showSpread(matrix, x, y, boo) { // функция, которая отображает доп. участки поля, если клетка полностью путсая и мы открыли её, или если это цифра, рядом с которой есть пустая
-	const cell = getCell(matrix, x, y);
 
-	if (cell.mine || cell.flag || (cell.number && !boo)) {
-		return;  //на всякий случай проверяем клетку на условие пустоты, есть мина, есть цифра > 0, есть флаг, то уходим
-	}
+function showSpread (matrix, x ,y) { // функция, которая отображает доп. участки поля, если клетка полностью путсая и мы открыли её
+  const cell = getCell(matrix,x,y)
 
-	if (cell.number && boo) {
-		showSpread(matrix, x - 1, y + 1, !boo);
-		showSpread(matrix, x, y + 1, !boo);
-		showSpread(matrix, x + 1, y + 1, !boo);
-		showSpread(matrix, x - 1, y, !boo);
-		showSpread(matrix, x + 1, y, !boo);
-		showSpread(matrix, x - 1, y - 1, !boo);
-		showSpread(matrix, x, y - 1, !boo);
-		showSpread(matrix, x + 1, y - 1, !boo);
-	}
+  if (cell.number || cell.mine || cell.flag) {
+     return  //на всякий случай проверяем клетку на условие пустоты, есть мина, есть цифра > 0, есть флаг, то уходим
+  }
 
+  forEach(matrix, x => x._marked = false) //создание временного поля дляя маркировки нужных эл.
 
-	forEach(matrix, x => x._marked = false); //создание временного поля дляя маркировки нужных эл.
+  cell._marked = true //маркируем наш элемент
 
-	cell._marked = true; //маркируем наш элемент
+  let flag = true  //пока флаг активен, ходим по массиву
+  while (flag){
+      flag = false
 
-	let flag = true;  //пока флаг активен, ходим по массиву
-	while (flag) {
-		flag = false;
+      for( let y = 0; y < matrix.length; y++) {
+          for (let x = 0; x < matrix.length; x++) {
+              const cell = matrix[y][x] //выбираем эелемент матрицы
 
-		for (let y = 0; y < matrix.length; y++) {
-			for (let x = 0; x < matrix.length; x++) {
-				const cell = matrix[y][x]; //выбираем эелемент матрицы
+              if (!cell._marked || cell.number) {
+                 continue //если не маркирован или пуст, идём дальше
+              }
 
-				if (!cell._marked || cell.number) {
-					continue //если не маркирован или пуст, идём дальше
-				}
-
-				const cells = getAroundCells(matrix, x, y); // ищем, все соседние эл к нашему
-				for (const cell of cells) {
-					if (cell._marked) { //если маркирован, идём дальше
-						continue;
-					}
-					if (!cell.flag && !cell.mine) {  //иначе, если нет флага и нет мины, то маркируем
-						cell._marked = true;
-						flag = true;
-					}
-				}
-			}
-		}
-	}
+              const cells = getAroundCells(matrix, x , y) // ищем, все соседние эл к нашему
+              for (const cell of cells) {
+                 if (cell._marked) { //если маркирован, идём дальше
+                   continue
+              }
+              if (!cell.flag && !cell.mine) {  //иначе, если нет флага и нет мины, то маркируем
+                  cell._marked = true
+                  flag = true
+                }
+              }
+            }
+        }
+   }
 
 
 
-	forEach(matrix, x => {
-		if (x._marked); {
-			x.show = true;  //вывод всех маркерованных клеток
-		}
+  forEach(matrix, x =>  { if(x._marked)  {
+                          x.show = true  //вывод всех маркерованных клеток
+                        }
 
-		delete x._marked; //удаление временного поля
-	})
+                        delete x._marked //удаление временного поля
+                      })
 
 }
+
 
 
 function isWin(matrix) { // функция проверяющая на победу
