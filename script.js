@@ -11,33 +11,55 @@ document
 	.addEventListener('click', init); //проверяем на клик, если он есть, то запускаем заново
 
 function init() { //функция запуска игры, в зависимости он переключателя сложности задаёт параметры
-	let countX;
-	let mines;
-	let countY;
+	var countX;
+	var mines;
+	var countY;
+	var bon;
+	var numbon;
+	var numlives;
 
-	if (easy.checked) {
+	if (document.getElementById('easy').checked) {
 		countX = 10;
 		countY = 10;
 		mines = 10;
 		difficulty = 'easy';
 	}
-	else if (norm.checked) {
+	else if (document.getElementById('norm').checked) {
 		countX = 20;
 		countY = 20;
 		mines = 40;
 		difficulty = 'normal';
 	}
-	else {
+	else if (document.getElementById('hard').checked) {
 		countX = 40;
-		countY = 20;
+		countY = 40;
 		mines = 70;
 		difficulty = 'hard';
 	}
+
+	document.getElementById("live_count").innerHTML = "1";
 	matrix = getMatrix(countX, countY); //создаём "поле" в виде массива, без изображения
+	bon = document.getElementById('bonus');
+	if (bon.checked) { //проверка на клик игры с допами
+		numbon = getNumberOfBonus(difficulty)
+	}
 	running = true; //помечаем, что играем
 	for (let i = 0; i < mines; i++) {
 		setRandomMine(matrix); //сажаем мины, скролько раз цикл работает, столько и мины
-		update() //обновляем изображение
+		update(); //обновляем изображение
+	}
+
+	if (bon.checked) { // спавн жизней и радаров
+		numlives = getRandomLives(numbon);
+		for (let i = 0; i < numlives; i++) {
+			setRandomLives(matrix);
+			update();
+		}
+		numbon = numbon - numlives;
+		for (let i = 0; i < numbon; i++) {
+			setRandomRadar(matrix);
+			update();
+		}
 	}
 }
 
@@ -149,8 +171,23 @@ function getInfo(event) {
 	}
 }
 
-function leftHandler(cell) { //функция при нажатие левой кнопки мыши
+function leftHandler(cell) {//функция при нажатие левой кнопки мыши
+	var count;
+
 	console.log("jjjjjjj");
+	if (cell.extralive) { //проверка на клик доп жизни
+		count = document.getElementById("live_count").textContent;
+		document.getElementById("live_count").innerHTML = Number(count) + 1;
+		cell.extralive = false;
+	}
+
+	if (cell.radar) { //проверка на клик радара
+		console.log("radar");
+		showRadar(matrix, cell.x, cell.y);
+		cell.radar = false;
+		update();
+	}
+
 	if (cell.flag || cell.show) { //если на клетке уже стоит флаг или мы уже тыкали на неё
 		return;
 	}
@@ -184,7 +221,7 @@ function bothHandler(cell) { //фукнция запускающаяся при 
 			.filter(x => !x.flag && !x.show)  //ищем все клетки, которые без флага и не показаны
 			.forEach(x => { // для каждой из них
 				x.show = true;  //покажи
-				showSpread(matrix, cell.x, cell.y, true); //если чёрная, то покажи все клетки до первых с цифрами
+				//showSpread(matrix, cell.x, cell.y, true); //если чёрная, то покажи все клетки до первых с цифрами
 			});
 	}
 
@@ -195,3 +232,4 @@ function bothHandler(cell) { //фукнция запускающаяся при 
 				.forEach(cell => cell.poten = true); //меняем для них значение poten
 	}
 }
+

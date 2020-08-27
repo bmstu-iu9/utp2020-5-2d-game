@@ -1,26 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!--   <link rel="stylesheet" href="style.css"> в style.css стили запихнуть -->
-
-<!-- в данном html все картинки берут из условной папки assets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <title>Сапёр</title>
 </head>
 <body>
-    <input id="easy" type="radio" name="hard" checked/> Легко
-    <input id="norm" type="radio" name="hard" /> Нормально
-    <input id="hard" type="radio" name="hard" /> Сложно
-    <p> <input id "bonus" type="checkbox" name="bonus" value=1/> Режим "Бонусы" </p>
-    <div id="app"></div>
-    <button>Начать заново</button>
+    <div class="wrapper">
+        <h1 id = "title">Сапёр</h1>
+        <div class="content" id="content">
+            <div id="app"></div>
+        </div>
+        <div class="left_buttons">
+            <span id="easy-span"><input id="easy" type="radio" name="selector" checked>Легко</span>
+            <span id="medium-span"><input id="norm" type="radio" name="selector"> Нормально</span>
+            <span id="hard-span"><input id="hard" type="radio" name="selector"> Сложно</span>
+            <button class="btn" id="restart">Рестарт</button>
+        </div>
+        <div class="right_buttons">
+            <h3 id = "lives">Жизни: <span id=live_count>1</span></h3>
+            <span id = "bonus-span"><input id="bonus" type="checkbox" name="bonus" value=1>Бонус режим</span>
+        </div>
+        <div class="bottom_buttons">
+            <span class="btn" id="button_game">Игра</span>
+            <span class="btn" id="button_options">Настройки</span>
+            <span class="btn actived" id = "button_rules">Правила игры</span>
+        </div>
+    </div>
     <script src="console.js"></script>
-    <!-- ВАЖНЫЕ ОБЩЕГО ПЛАНА ФУНКЦИИ, РЕИСПОЛЬЗОВАННЫЕ -->
-
     <script src="script.js"></script>
-    <!-- ТИПО MAIN -->
-
+    <script src = "xhr.js"></script>
 </body>
 </html>
