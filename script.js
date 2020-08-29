@@ -31,9 +31,9 @@ function init() { //функция запуска игры, в зависимо�
 		difficulty = 'normal';
 	}
 	else if (document.getElementById('hard').checked) {
-		countX = 40;
-		countY = 40;
-		mines = 70;
+		countX = 20;
+		countY = 20;
+		mines = 60;
 		difficulty = 'hard';
 	}
 
