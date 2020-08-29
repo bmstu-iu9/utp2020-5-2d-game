@@ -16,7 +16,9 @@ function getMatrix(col, row) {  /* функция по созданию матр
 				show: false, // выводить или нет
 				flag: false, // !!!!!НА ВСЯКИЙ СЛУЧАЙ!!! ИЗМЕНИТЬ ПРИ ИСПОЛЬЗОВАНИЕ!!!
 				number: 0, // колличество мин вокруг
-				poten: false // для дабл клика подсветка
+				poten: false, // для дабл клика подсветка
+				extralive: false, //доп жизнь
+				radar: false //радар
 			});
 
 		}
@@ -52,6 +54,65 @@ function setRandomMine(matrix) {
 	for (const cell of cells) {  /* цикл ув. переменной number для всех эл. массива ctlls*/
 		cell.number += 1;
 	}
+}
+
+function getRandomLives(numbon) { //рандомизация кол-ва доп жизней в зависимости от сложности
+	let extralivescount;
+	if (numbon == 3) {
+		extralivescount = Math.round(1 - 0.5 + Math.random() * (2 - 1 + 1));
+	}
+	if (numbon == 7) {
+		extralivescount = Math.round(2 - 0.5 + Math.random() * (4 - 2 + 1));
+	}
+	if (numbon == 15) {
+		extralivescount = Math.round(5 - 0.5 + Math.random() * (10 - 5 + 1));
+	}
+	return (extralivescount);
+}
+
+function setRandomLives(matrix) { //помещение доп жизни на рандомную клетку
+	const cell = getRandomFreeCell(matrix);
+
+	cell.extralive = true;
+	const cells = getAroundCells(matrix, cell.x, cell.y);
+}
+
+function setRandomRadar(matrix) { //помещение радара на рандомную клетку
+	const cell = getRandomFreeCell(matrix);
+
+	cell.radar = true;
+	console.log(cell.x);
+	console.log(cell.y);
+	const cells = getAroundCells(matrix, cell.x, cell.y);
+}
+
+function showRadar(matrix, x, y) { //фукнция помечающий метки при активации радара
+	let flag = true;
+	let num;
+	let num1;
+	while (flag) {
+		flag = false;
+		num = y - 2;
+		num1 = x - 2;
+		for (num; num != y + 3; num++) {
+			num1 = x - 2;
+			for (num1; num1 != x + 3; num1++) {
+				const cell = getCell(matrix, num1, num);
+				if (cell.mine) {
+					cell.flag = true;
+				}
+			}
+		}
+	}
+}
+
+function getNumberOfBonus(difficulty) { //получаем кол-во бонусов в зависимоти от сложности
+	if (difficulty == 'easy')
+		return 3;
+	if (difficulty == 'normal')
+		return 7;
+	if (difficulty == 'hard')
+		return 15;
 }
 
 function getCell(matrix, x, y) {   /*функция проверки на сущ. объекта в нашей матрице + его возвращение, если сущ*/
@@ -133,16 +194,22 @@ function matrixToHtml(matrix, difficulty) {  /*превращает матриц
 				continue;
 			}
 
+			if (cell.extralive) {
+				imgElement.src = `assets/extralive.jpg`; //даём нговое значение клетке в виде изображения(какое опр. по названию файла)
+				continue;
+			}
+
+			if (cell.radar) {
+				imgElement.src = `assets/radar.png`; //даём нговое значение клетке в виде изображения(какое опр. по названию файла)
+				continue;
+			}
+
 			if (cell.number) {
 				imgElement.src = `assets/${cell.number}.png`; //даём нговое значение клетке в виде изображения(какое опр. по названию файла)
 				continue;
 			}
 
-
 			imgElement.src = `assets/start.jpg`; //даём нговое значение клетке в виде изображения(какое опр. по названию файла)
-
-
-
 		}
 		gameElement.append(rowelement);
 	}
@@ -160,7 +227,6 @@ function forEach(matrix, handler) {  //функция, которая получ
 		}
 	}
 }
-
 
 function showSpread (matrix, x ,y) { // функция, которая отображает доп. участки поля, если клетка полностью путсая и мы открыли её
   const cell = getCell(matrix,x,y)
@@ -190,9 +256,9 @@ function showSpread (matrix, x ,y) { // функция, которая отоб�
                  if (cell._marked) { //если маркирован, идём дальше
                    continue
               }
-              if (!cell.flag && !cell.mine) {  //иначе, если нет флага и нет мины, то маркируем
-                  cell._marked = true
-                  flag = true
+              if (!cell.flag && !cell.mine) { //иначе, если нет флага и нет мины, то маркируем
+                  	cell._marked = true
+                  	flag = true
                 }
               }
             }
@@ -250,12 +316,21 @@ function isWin(matrix) { // функция проверяющая на побе�
 }
 
 function isLosing(matrix) {//проверка на проигрышь
+	var count;
 	for (let y = 0; y < matrix.length; y++) {
 		for (let x = 0; x < matrix[y].length; x++) {
 			const cell = matrix[y][x];
 
 			if (cell.mine && cell.show) { //если у какой-то эл. матрицы мина и показан, то проиграли
-				return true;
+				count = document.getElementById("live_count").textContent;
+				document.getElementById("live_count").innerHTML = count - 1; //смена  кол-ва жизней
+				cell.flag = true;
+				cell.mine = false;
+				if (document.getElementById("live_count").textContent == 0) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 	}

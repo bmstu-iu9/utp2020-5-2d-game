@@ -14,6 +14,9 @@ function init() { //функция запуска игры, в зависимо�
 	var countX;
 	var mines;
 	var countY;
+	var bon;
+	var numbon;
+	var numlives;
 
 	if (document.getElementById('easy').checked) {
 		countX = 10;
@@ -28,16 +31,35 @@ function init() { //функция запуска игры, в зависимо�
 		difficulty = 'normal';
 	}
 	else if (document.getElementById('hard').checked) {
-		countX = 40;
+		countX = 20;
 		countY = 20;
-		mines = 70;
+		mines = 60;
 		difficulty = 'hard';
 	}
+
+	document.getElementById("live_count").innerHTML = "1";
 	matrix = getMatrix(countX, countY); //создаём "поле" в виде массива, без изображения
+	bon = document.getElementById('bonus');
+	if (bon.checked) { //проверка на клик игры с допами
+		numbon = getNumberOfBonus(difficulty)
+	}
 	running = true; //помечаем, что играем
 	for (let i = 0; i < mines; i++) {
 		setRandomMine(matrix); //сажаем мины, скролько раз цикл работает, столько и мины
 		update(); //обновляем изображение
+	}
+
+	if (bon.checked) { // спавн жизней и радаров
+		numlives = getRandomLives(numbon);
+		for (let i = 0; i < numlives; i++) {
+			setRandomLives(matrix);
+			update();
+		}
+		numbon = numbon - numlives;
+		for (let i = 0; i < numbon; i++) {
+			setRandomRadar(matrix);
+			update();
+		}
 	}
 }
 
@@ -149,8 +171,23 @@ function getInfo(event) {
 	}
 }
 
-function leftHandler(cell) { //функция при нажатие левой кнопки мыши
+function leftHandler(cell) {//функция при нажатие левой кнопки мыши
+	var count;
+
 	console.log("jjjjjjj");
+	if (cell.extralive) { //проверка на клик доп жизни
+		count = document.getElementById("live_count").textContent;
+		document.getElementById("live_count").innerHTML = Number(count) + 1;
+		cell.extralive = false;
+	}
+
+	if (cell.radar) { //проверка на клик радара
+		console.log("radar");
+		showRadar(matrix, cell.x, cell.y);
+		cell.radar = false;
+		update();
+	}
+
 	if (cell.flag || cell.show) { //если на клетке уже стоит флаг или мы уже тыкали на неё
 		return;
 	}
@@ -158,7 +195,7 @@ function leftHandler(cell) { //функция при нажатие левой �
 	cell.show = true;
 
 	if (!cell.mine) { //если клетка пустая, то открываем все смежные пустые клетки, если же это цифра, то, если есть смежная пустая, то открываем все смежные с последней
-		//showSpread(matrix, cell.x, cell.y, true); //функция по поткрытию всех соседних клеток до 1 клеток с цифрами
+		showSpread(matrix, cell.x, cell.y, true); //функция по поткрытию всех соседних клеток до 1 клеток с цифрами
 		update();
 	}
 }
