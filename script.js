@@ -190,4 +190,3 @@ function bothHandler(cell) { //фукнция запускающаяся при 
          .forEach(cell => cell.poten = true) //меняем для них значение poten
   }
 }
-
