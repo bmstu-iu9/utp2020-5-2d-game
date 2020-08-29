@@ -109,3 +109,18 @@ h2 {
 .option {
     font-size: 18px;
 }
+
+.easy_img{
+    width: 40px;
+    height: 28px;
+}
+    
+.normal_img {
+    width: 20px;
+    height: 14px;
+}
+    
+.hard_img {
+    width: 10px;
+    height: 7px;
+}
