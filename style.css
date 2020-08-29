@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    background-color: #919389;
+}
+
+.wrapper {
+    width: 997px;
+    height: 843px;
+    margin: 0 auto;
+    position: relative;
+    background-image: url(assets/terminal.png);
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
+h1 {
+    position: absolute;
+    top: 17px;
+    left: 423px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.content {
+    padding: 5px;
+    position: absolute;
+    top: 106px;
+    left: 279px;
+    vertical-align: middle;
+    overflow: auto;
+    width: 435px;
+    height: 320px;
+    border-radius: 20px;
+    color: #64935c;
+    font-size: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+h2 {
+    text-align: center;
+}
+
+.left_buttons {
+    font-family: 'Oswald', sans-serif;
+    position: absolute;
+    top: 253px;
+    left: 138px;
+    color: #414141;
+    float: left;
+}
+
+.left_buttons span {
+    margin: 15px;
+    display: block;
+}
+
+.right_buttons {
+    font-family: 'Oswald', sans-serif;
+    position: absolute;
+    top: 279px;
+    left: 738px;
+    color: blue;
+}
+.bottom_buttons {
+    position: absolute;
+    top: 455px;
+    left: 310px;
+    margin: 50px auto 0px auto;
+}
+
+.btn {
+    margin: 0px 20px 0 5px;
+    display: inline-block;
+    font-family: arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(44, 44, 44);
+    text-decoration: none;
+    user-select: none;
+    padding: .2em 1.2em;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: 4px;
+    background: rgb(245, 245, 245) linear-gradient(#f4f4f4, #f1f1f1);
+    transition: all .218s ease 0s;
+    cursor: pointer;
+}
+
+.btn:hover {
+    color: rgb(24, 24, 24);
+    border: 1px solid rgb(198, 198, 198);
+    background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}
+
+.btn.actived {
+    color: rgb(51, 51, 51);
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(238, 238, 238) linear-gradient(rgb(238, 238, 238), rgb(224, 224, 224));
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1) inset;
+}
+
+.right_buttons .btn {
+    margin: 0;
+}
+
+.option {
+    font-size: 18px;
+}
