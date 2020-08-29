@@ -29,14 +29,16 @@ function getMatrix(col, row) {  /* функция по созданию матр
 	return matrix;
 }
 
-function getRandomFreeCell(matrix) {   /*функция, котораяя выбирает клетку, в которую кладёт мину*/
+function getRandomFreeCell(matrix, a, b) {   /*функция, котораяя выбирает клетку, в которую кладёт мину*/
 	const freeCells = [];   /*массив клеток, которые не заполнены минами. Он заполнякется клетками, после чего рандомная клетка заполняется миной*/
 
 	for (let y = 0; y < matrix.length; y++) {
 		for (let x = 0; x < matrix[y].length; x++) {
 			const cell = matrix[y][x]; /*клетка */
 			if (!cell.mine) {   /* проверка на то, что в ней нет мины*/
-				freeCells.push(cell);
+				if(running || b != y || a != x){//проверяем, не совпадает ли с начальной координатой
+					freeCells.push(cell);
+				}
 			}
 		}
 	}
@@ -44,14 +46,14 @@ function getRandomFreeCell(matrix) {   /*функция, котораяя выб
 	return freeCells[index]; /*рандомный элемент массива */
 }
 
-function setRandomMine(matrix) {
-	const cell = getRandomFreeCell(matrix); /* получаем рандомную мину*/
+function setRandomMine(matrix, a, b) {
+	const cell = getRandomFreeCell(matrix, a, b); /* получаем рандомную мину*/
 
 	cell.mine = true;
 
 	const cells = getAroundCells(matrix, cell.x, cell.y); /* ищем все клетки, которые вокруг нашей мины */
 
-	for (const cell of cells) {  /* цикл ув. переменной number для всех эл. массива ctlls*/
+	for (const cell of cells) {  /* цикл ув. переменной number для всех эл. массива cells*/
 		cell.number += 1;
 	}
 }
@@ -218,7 +220,6 @@ function matrixToHtml(matrix, difficulty) {  /*превращает матриц
 	return gameElement;
 
 }
-
 
 function forEach(matrix, handler) {  //функция, которая получает матрицу и функцию handler, теперь для каждого элекента матрицы сделай  handler
 	for (let y = 0; y < matrix.length; y++) {

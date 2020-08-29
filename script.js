@@ -4,6 +4,8 @@ let running = null //условная переменная, которая от�
 
 let difficulty;
 
+let mines;
+
 init();
 
 document
@@ -12,7 +14,6 @@ document
 
 function init() { //функция запуска игры, в зависимости он переключателя сложности задаёт параметры
 	var countX;
-	var mines;
 	var countY;
 	var bon;
 	var numbon;
@@ -27,26 +28,21 @@ function init() { //функция запуска игры, в зависимо�
 	else if (document.getElementById('norm').checked) {
 		countX = 20;
 		countY = 20;
-		mines = 40;
+		mines = 60;
 		difficulty = 'normal';
 	}
 	else if (document.getElementById('hard').checked) {
 		countX = 20;
 		countY = 20;
-		mines = 60;
+		mines = 80;
 		difficulty = 'hard';
 	}
-
+	
 	document.getElementById("live_count").innerHTML = "1";
 	matrix = getMatrix(countX, countY); //создаём "поле" в виде массива, без изображения
 	bon = document.getElementById('bonus');
 	if (bon.checked) { //проверка на клик игры с допами
 		numbon = getNumberOfBonus(difficulty)
-	}
-	running = true; //помечаем, что играем
-	for (let i = 0; i < mines; i++) {
-		setRandomMine(matrix); //сажаем мины, скролько раз цикл работает, столько и мины
-		update(); //обновляем изображение
 	}
 
 	if (bon.checked) { // спавн жизней и радаров
@@ -61,6 +57,8 @@ function init() { //функция запуска игры, в зависимо�
 			update();
 		}
 	}
+	running = false;
+	update();
 }
 
 if (!running) {
@@ -89,7 +87,7 @@ function update() {  //функиця обновления изображени�
 		});
 
 	if (isLosing(matrix)) { //проверяем на условие проигрыша
-		alert('ГГ ВП! ВЫ ПРОИГРАЛИ! ');
+		alert('Попробуй еще раз!');
 		running = false;
 		init(); //новый запуск
 	}
@@ -173,6 +171,13 @@ function getInfo(event) {
 
 function leftHandler(cell) {//функция при нажатие левой кнопки мыши
 	var count;
+	if(!running){
+		for (let i = 0; i < mines; i++) {
+			setRandomMine(matrix, cell.x, cell.y); //сажаем мины, скролько раз цикл работает, столько и мины
+			update(); //обновляем изображение
+		}
+	}
+	running = true; //отмечаем, что играем
 
 	console.log("jjjjjjj");
 	if (cell.extralive) { //проверка на клик доп жизни
