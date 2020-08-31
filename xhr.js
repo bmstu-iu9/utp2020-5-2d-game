@@ -62,7 +62,7 @@ buttonGame.onclick = function () {
         buttonGame.classList.toggle("actived");
         buttonOptions.classList.remove("actived");
         buttonRules.classList.remove("actived");
-
+	init();
     }
 }
 
@@ -71,7 +71,10 @@ buttonOptions.onclick = function () {
     var xhr = new XMLHttpRequest();
 
     // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
-    xhr.open('GET', 'options.html', false);
+    if(language == "russian")
+        xhr.open('GET', 'options.html', false);
+    else
+        xhr.open('GET', 'optionsEn.html', false);
 
     // 3. Отсылаем запрос
     xhr.send();
@@ -105,7 +108,10 @@ buttonRules.onclick = function () {
     var xhr = new XMLHttpRequest();
 
     // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
-    xhr.open('GET', 'rules.html', false);
+    if(language == "russian")
+        xhr.open('GET', 'rules.html', false);
+    else
+        xhr.open('GET', 'rulesEn.html', false);
 
     // 3. Отсылаем запрос
     xhr.send();
@@ -141,7 +147,8 @@ function setRussian () {
     medium.innerHTML = "<input id=\"norm\" type=\"radio\" name=\"hard\">Нормально";
     hard.innerHTML = "<input id=\"hard\" type=\"radio\" name=\"hard\">Сложно";
     restart.innerHTML = "Рестарт";
-     bonus.innerHTML = "<input id=\"bonus\" type=\"checkbox\" name=\"bonus\" value=1>Бонус режим";
+    bonus.innerHTML = "<input id=\"bonus\" type=\"checkbox\" name=\"bonus\" value=1>Бонус режим";
+    lives.innerHTML = "<id = \"lives\">Жизни: <span id=live_count>1</span>";
     switch(indexOfPage) {
         case 0:
             break;
@@ -165,12 +172,13 @@ function setEnglish() {
     radioEng.setAttribute("checked", "true");
     buttonGame.innerHTML = "Game";
     buttonOptions.innerHTML = "Options";
-    buttonRules.innerHTML = "Rules of game";
+    buttonRules.innerHTML = "Game rules";
     easy.innerHTML = "<input id=\"easy\" type=\"radio\" name=\"hard\" checked>Easy";
     medium.innerHTML = "<input id=\"norm\" type=\"radio\" name=\"hard\">Medium";
     hard.innerHTML = "<input id=\"hard\" type=\"radio\" name=\"hard\">Hard";
     restart.innerHTML = "Restart";
     bonus.innerHTML = "<input id=\"bonus\" type=\"checkbox\" name=\"bonus\" value=1>Bonus mode";
+    lives.innerHTML = "<id = \"lives\">Lives: <span id=live_count>1</span>";
     switch(indexOfPage) {
         case 0:
             break;

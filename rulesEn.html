@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Game rules</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="content" id="content">
+            <h2>Game rules</h2>
+            <p>A flat or three-dimensional playing field is divided into adjacent cells (squares, hexagons, cubes, etc.), some of which are "mined"; the number of "mined" cells is known. The goal of the game is to open all the cells that do not contain mines.The player opens the cells, trying not to open the cell with a mine. Opening the cell with a mine, he loses. Mines are placed after the first move, so in new versions it is impossible to lose on the first move. In older versions, it is quite common for a mine to appear under the first open cell. If by open cell mines not, it appears the number of cells adjacent to the newly opened, "bomb" (in each version of the game the neighborhood is defined differently); using these numbers, the player tries to calculate the location of mines, but sometimes even in the middle and at the end of the game some cells still have to open at random. If there are also no mines under neighboring cells, then some "non-mined" area opens up to the cells that contain numbers. The player can mark "booby-trapped" cells to avoid accidentally opening them. By opening all "non-mined" cells, the player wins..</p>
+        </div>
+        <div class="bottom_buttons">
+            <span class="btn" id="button_game">Game</span>
+            <span class="btn" id="button_options">Options</span>
+            <span class="btn actived" id="button_rules">Game rules</span>
+        </div>
+    </div>
+    <script src = "xhr.js"></script>
+    <script src="script.js"></script>
+    <script src="console.js"></script>
+</body>
+
+</html>
